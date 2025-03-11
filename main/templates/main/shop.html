@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин - BikeShop</title>
+    <link rel="stylesheet" href="{% static 'main/css/site.css' %}">
+</head>
+<body>
+    <header>
+        <a href="{% url 'about' %}">
+            <img src="{% static 'main/images/logo.png' %}" alt="Логотип BikeShop" class="logo">
+        </a>
+        <h1>BikeShop</h1>
+    </header>
+    <nav>
+        <a href="{% url 'about' %}">Главная</a>
+        <a href="{% url 'links' %}">Навигатор</a>
+        <a href="{% url 'shop' %}" class="active">Магазин</a>
+        <a href="{% url 'services' %}">Услуги</a>
+        <a href="{% url 'contacts' %}">Контакты</a>
+    </nav>
+    <main>
+        <section>
+            <img src="{% static 'main/images/bike_shop.jpg' %}" alt="velobmx" class="bike-image">
+
+            <h2>Каталог велосипедов</h2>
+            <p>У нас широкий ассортимент велосипедов для любого уровня подготовки!</p>
+            <ul>
+                <li>Горные велосипеды</li>
+                <li>Шоссейные велосипеды</li>
+                <li>Городские и прогулочные велосипеды</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

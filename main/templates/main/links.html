@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полезные ссылки</title>
+    <link rel="stylesheet" href="{% static 'main/css/site.css' %}">
+</head>
+<body>
+    <header>
+        <a href="{% url 'about' %}">
+            <img src="{% static 'main/images/logo.png' %}" alt="Логотип BikeShop" class="logo">
+        </a>
+        <h1>BikeShop</h1>
+    </header>
+    <nav>
+        <a href="{% url 'about' %}">Главная</a>
+        <a href="{% url 'links' %}" class="active">Навигатор</a>
+        <a href="{% url 'shop' %}">Магазин</a>
+        <a href="{% url 'services' %}">Услуги</a>
+        <a href="{% url 'contacts' %}">Контакты</a>
+    </nav>
+    <main>
+        <section>
+            <img src="{% static 'main/images/bike_link.jpg' %}" alt="velo" class="bike-image">
+            <div class="text-content">
+                <h2>Полезные ссылки для велосипедистов</h2>
+                <p>Здесь собраны ресурсы, которые помогут вам выбрать велосипед, узнать новости велоспорта и приобрести запчасти.</p>
+            </div>
+        </section>
+        <section>
+            <div class="text-content">
+                <h2>Рекомендуемые сайты</h2>
+                <ul>
+                    <li><a href="https://www.velomania.ru/">Веломания</a> - крупнейший форум о велоспорте.</li>
+                    <li><a href="https://www.cyclingweekly.com/">Cycling Weekly</a> - новости и статьи о профессиональном велоспорте.</li>
+                    <li><a href="https://www.bike-components.de/">Bike-Components</a> - интернет-магазин велозапчастей и аксессуаров.</li>
+                </ul>
+            </div>
+        </section>
+        <a href="{% url 'about' %}">Назад на главную страницу</a>
+    </main>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты - BikeShop</title>
+    <link rel="stylesheet" href="{% static 'main/css/contacts.css' %}">
+</head>
+<body>
+    <header>
+        <a href="{% url 'about' %}">
+            <img src="{% static 'main/images/logo.png' %}" alt="Логотип BikeShop" class="logo">
+        </a>
+        <h1>BikeShop</h1>
+    </header>
+    <nav>
+        <a href="{% url 'about' %}">Главная</a>
+        <a href="{% url 'links' %}">Навигатор</a>
+        <a href="{% url 'shop' %}">Магазин</a>
+        <a href="{% url 'services' %}">Услуги</a>
+        <a href="{% url 'contacts' %}" class="active">Контакты</a>
+    </nav>
+    <main>
+        <section>
+            <h2>Наши контакты</h2>
+            <p><strong>Адрес:</strong> ул. Ленина, 5, Псков</p>
+            <p><strong>Телефон:</strong> +7 (999) 123-45-67</p>
+            <p><strong>Email:</strong> info@bikeshop.ru</p>
+            <p><strong>Часы работы:</strong> Пн-Пт: 9:00 - 20:00, Сб-Вс: 10:00 - 18:00</p>
+        </section>
+        <section>
+            <h2>Мы на карте</h2>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20986.032456083405!2d28.330695098578734!3d57.81362991240792!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469164c3c5a3a8b3%3A0x3f3a3bc5c72236cf!2z0J_QsNGA0Log0JrRg9C30LjQvdGB0LrQvtCz0L4sINCf0YDQvtC30LDQvdCw!5e0!3m2!1sru!2sru!4v1632306193145!5m2!1sru!2sru" 
+                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </section>
+    </main>
+</body>
+</html>
