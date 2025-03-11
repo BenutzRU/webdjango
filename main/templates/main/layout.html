@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BikeShop{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/css/site.css' %}">
+</head>
+<body>
+    <header>
+        <a href="{% url 'about' %}">
+            <img src="{% static 'main/images/logo.png' %}" alt="Логотип BikeShop" class="logo">
+        </a>
+        <h1>BikeShop</h1>
+    </header>
+
+    <nav>
+        <a href="{% url 'about' %}">Главная</a>
+        <a href="{% url 'links' %}">Навигатор</a>
+        <a href="{% url 'shop' %}">Магазин</a>
+        <a href="{% url 'services' %}">Услуги</a>
+        <a href="{% url 'contacts' %}">Контакты</a>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

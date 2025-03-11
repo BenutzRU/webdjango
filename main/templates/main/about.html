@@ -1,52 +1,25 @@
+{% extends 'main/layout.html' %}
+
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>О нашем магазине</title>
-    <link rel="icon" href="{% static 'main/images/logo.png' %}" type="image/png">
 
-    <link rel="stylesheet" href="{% static 'main/css/site.css' %}">
-</head>
-<body>
-    <header>
-        <a href="{% url 'about' %}">
-            <img src="{% static 'main/images/logo.png' %}" alt="Логотип BikeShop" class="logo">
-        </a>
-        
-        <h1>BikeShop</h1>
-    </header>
-    
-    <nav>
-        <a href="{% url 'about' %}" class="active">Главная</a>
-        <a href="{% url 'links' %}">Навигатор</a>
-        <a href="{% url 'shop' %}">Магазин</a>
-        <a href="{% url 'services' %}">Услуги</a>
-        <a href="{% url 'contacts' %}">Контакты</a>
-    </nav>
+{% block title %}О нас - BikeShop{% endblock %}
 
-    <main>
-        <section>
-            <img src="{% static 'main/images/bike1.jpg' %}" alt="Велосипед 1" class="bike-image">
-            <div class="text-content">
-                <h2>Добро пожаловать!</h2>
-                <p>Мы - команда энтузиастов велоспорта, предлагающая широкий ассортимент велосипедов и услуг по ремонту. Наша цель - сделать велоспорт доступным и приятным для каждого.</p>
-                <p>В нашем магазине вы найдете велосипеды для любого уровня подготовки, от начинающих до профессионалов. Мы также предлагаем услуги по техническому обслуживанию и ремонту велосипедов любой сложности.</p>
-            </div>
-        </section>
+{% block content %}
+<section>
+    <img src="{% static 'main/images/bike1.jpg' %}" alt="Велосипед 1" class="bike-image">
+    <h2>Добро пожаловать!</h2>
+    <p>Мы - команда энтузиастов велоспорта, предлагающая широкий ассортимент велосипедов и услуг по ремонту.</p>
+</section>
 
-        <section>
-            <img src="{% static 'main/images/bike_repair.jpg' %}" alt="Ремонт велосипедов" class="bike-image">
-            <div class="text-content">
-                <h2>Наши услуги</h2>
-                <ul> 
-                    <li>Продажа велосипедов</li>
-                    <li>Ремонт и обслуживание</li>
-                    <li>Подбор аксессуаров</li>
-                </ul>
-            </div>
-        </section>
-    </main>
-</body>
-</html>
+<section>
+    <img src="{% static 'main/images/bike_repair.jpg' %}" alt="Ремонт велосипедов" class="bike-image">
+    <div class="text-content">
+        <h2>Наши услуги</h2>
+        <ul> 
+            <li>Продажа велосипедов</li>
+            <li>Ремонт и обслуживание</li>
+            <li>Подбор аксессуаров</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}
