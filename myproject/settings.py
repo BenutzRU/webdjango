@@ -55,7 +55,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Проверить здесь
+        'DIRS': [BASE_DIR / 'templates'],  # папка templates with html
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

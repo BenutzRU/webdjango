@@ -1,0 +1,15 @@
+{% extends "main/layout.html" %}
+
+{% load static %}
+
+{% block title %}Спасибо за отзыв{% endblock %}
+
+{% block content %}
+    <h2>Спасибо за ваш отзыв!</h2>
+    <ul>
+        {% for key, value in data.items %}
+            <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'feedback' %}">Вернуться назад</a>
+{% endblock %}

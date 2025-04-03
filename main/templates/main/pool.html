@@ -1,0 +1,35 @@
+{% extends "main/layout.html" %}
+
+{% block title %}Отзывы - BikeShop{% endblock %}
+
+{% block content %}
+<h2>Оставьте ваш отзыв</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+
+{% if submitted %}
+    <h3>Спасибо за ваш отзыв!</h3>
+    <ul>
+        {% for key, value in data.items %}
+            <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("input, textarea").hover(
+            function() {
+                $(this).css("background-color", "#e8e6e6");
+            },
+            function() {
+                $(this).css("background-color", "#ffffff");
+            }
+        );
+    });
+</script>
+{% endblock %}

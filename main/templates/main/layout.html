@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}BikeShop{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'main/css/site.css' %}">
+    <link rel="icon" href="{% static 'main/images/logo.png' %}">
 </head>
 <body>
     <header>
@@ -21,6 +22,8 @@
         <a href="{% url 'shop' %}">Магазин</a>
         <a href="{% url 'services' %}">Услуги</a>
         <a href="{% url 'contacts' %}">Контакты</a>
+        <a href="{% url 'feedback' %}">Обратная связь</a>
+
     </nav>
 
     <main>
