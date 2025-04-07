@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_REDIRECT_URL = 'about'  # После логина на /about/
+LOGOUT_REDIRECT_URL = 'about'  # После логаута на /about/
 
 # Application definition
 
