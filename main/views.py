@@ -48,7 +48,7 @@ def feedback_view(request):
 
 def registration(request):
     assert isinstance(request, HttpRequest)
-    if request.method == "POST":
+    if request.method == "POST": # проверка на отправку формы
         regform = UserCreationForm(request.POST)
         if regform.is_valid():
             reg_f = regform.save(commit=False)
@@ -60,7 +60,7 @@ def registration(request):
             reg_f.save()
             return redirect('about')  
     else:
-        regform = UserCreationForm()
+        regform = UserCreationForm() # создание объекта формы
     return render(
         request,
         'main/registration.html',
