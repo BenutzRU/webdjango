@@ -89,3 +89,17 @@ h1 {
 li {
     margin-bottom: 5px;
 }
+
+
+button, .btn {
+    background-color: #3498db;  /* Голубой фон */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+}
+
+button:hover, .btn:hover {
+    background-color: #2980b9;  /* Темнее при наведении */
+}
+

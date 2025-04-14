@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from datetime import datetime  # Добавляем импорт
+from .models import Blog
 
 def custom_logout(request):
     logout(request)
@@ -66,6 +67,32 @@ def registration(request):
         'main/registration.html',
         {
             'regform': regform,
+            'year': datetime.now().year,
+        }
+    )
+def blog(request):
+    """Renders the blog page."""
+    assert isinstance(request, HttpRequest)
+    posts = Blog.objects.all()  # Запрос на выбор всех статей
+    return render(
+        request,
+        'main/blog.html',  # Путь к шаблону
+        {
+            'title': 'Блог',
+            'posts': posts,  # Передача списка статей
+            'year': datetime.now().year,
+        }
+    )
+
+def blogpost(request, parametr):
+    """Renders the blogpost page."""
+    assert isinstance(request, HttpRequest)
+    post_1 = Blog.objects.get(id=parametr)  # Запрос на выбор статьи по ID
+    return render(
+        request,
+        'main/blogpost.html',
+        {
+            'post_1': post_1,  # Передача статьи
             'year': datetime.now().year,
         }
     )

@@ -7,7 +7,7 @@
     <title>{% block title %}BikeShop{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'main/css/site.css' %}">
     <link rel="icon" href="{% static 'main/images/logo.png' %}">
-</head>
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.css' %}"></head>
 <body>
     <header>
         <a href="{% url 'about' %}">
@@ -23,6 +23,9 @@
         <a href="{% url 'services' %}">Услуги</a>
         <a href="{% url 'contacts' %}">Контакты</a>
         <a href="{% url 'feedback' %}">Обратная связь</a>
+        <a href="{% url 'blog' %}">Блог</a> 
+
+
         {% if not user.is_authenticated %}
             <a href="{% url 'registration' %}">Регистрация</a>
             <a href="{% url 'login' %}">Вход</a>
