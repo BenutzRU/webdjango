@@ -5,7 +5,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from datetime import datetime  # Добавляем импорт
-from .models import Blog
+from .models import Blog, Comment
+from .forms import CommentForm
+
+
+
 
 def custom_logout(request):
     logout(request)
@@ -87,12 +91,28 @@ def blog(request):
 def blogpost(request, parametr):
     """Renders the blogpost page."""
     assert isinstance(request, HttpRequest)
-    post_1 = Blog.objects.get(id=parametr)  # Запрос на выбор статьи по ID
+    post_1 = Blog.objects.get(id=parametr)  # Запрос на выбор статьи
+    comments = Comment.objects.filter(post=parametr)  # Запрос на выбор всех комментариев
+
+    if request.method == "POST":  # После отправки формы
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment_f = form.save(commit=False)
+            comment_f.author = request.user  # Добавляем авторизованного пользователя
+            comment_f.date = datetime.now()  # Текущая дата
+            comment_f.post = Blog.objects.get(id=parametr)  # Связь со статьей
+            comment_f.save()  # Сохраняем комментарий
+            return redirect('blogpost', parametr=post_1.id)  # Переадресация
+    else:
+        form = CommentForm()  # Пустая форма для GET-запроса
+
     return render(
         request,
         'main/blogpost.html',
         {
-            'post_1': post_1,  # Передача статьи
+            'post_1': post_1,
+            'comments': comments,  # Передача комментариев
+            'form': form,  # Передача формы
             'year': datetime.now().year,
         }
     )

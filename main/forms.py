@@ -1,4 +1,6 @@
 from django import forms
+from django.db import models
+from .models import Comment
 
 class FeedbackForm(forms.Form):
     name = forms.CharField(label="Ваше имя", required=True)
@@ -9,6 +11,7 @@ class FeedbackForm(forms.Form):
         widget=forms.RadioSelect,
         required=True
     )
+
     usability = forms.BooleanField(label="Удобство использования", required=False)
     design = forms.BooleanField(label="Дизайн", required=False)
     functionality = forms.BooleanField(label="Функциональность", required=False)
@@ -17,3 +20,9 @@ class FeedbackForm(forms.Form):
         widget=forms.Textarea(attrs={"rows": 5, "cols": 40}),
         required=True
     )
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment  # Используемая модель
+        fields = ('text',)  # Требуется заполнить только поле text
+        labels = {'text': "Комментарий"}  # Метка к полю формы

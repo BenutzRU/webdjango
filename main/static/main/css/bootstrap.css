@@ -10853,5 +10853,23 @@ textarea.form-control-lg {
   background-color: orangered;  /* Оранжевый фон */
   border-radius: 20%;       /* Скругленные углы */
 }
+/* Стили для кнопки "Отправить комментарий" */
+.btn-default.save {
+  background-color: #27ae60;  /* Зеленый фон */
+  color: white;               /* Белый текст */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: all 0.3s ease;  /* Плавный переход для эффектов */
+}
 
+.btn-default.save:hover {
+  background-color: #219653;  /* Темнее зеленый при наведении */
+  transform: scale(1.05);     /* Легкое увеличение при наведении */
+}
+
+.btn-default.save:active {
+  background-color: #1b7741;  /* Еще темнее при нажатии */
+  transform: scale(0.95);     /* Легкое уменьшение при нажатии */
+}
 /*# sourceMappingURL=bootstrap.css.map */

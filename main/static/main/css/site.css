@@ -103,3 +103,29 @@ button:hover, .btn:hover {
     background-color: #2980b9;  /* Темнее при наведении */
 }
 
+/* Стили для комментариев */
+h5 {
+    color: #27ae60;  /* Цвет автора комментария */
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+h7 {
+    color: #7f8c8d;  /* Серый цвет для даты */
+    font-style: italic;
+    display: block;
+    margin-bottom: 5px;
+}
+
+hr {
+    border-top: 1px solid #ddd;  /* Светлая линия между комментариями */
+    margin: 15px 0;
+}
+
+/* Контейнер для комментария */
+.comment {
+    background-color: #f9f9f9;  /* Светлый фон */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
