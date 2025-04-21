@@ -53,21 +53,25 @@
   
 
 <!-- Оригинальное содержимое -->
-<section>
-    <h2>Добро пожаловать!</h2>
-    <p>Мы - команда энтузиастов велоспорта, предлагающая широкий ассортимент велосипедов и услуг по ремонту.</p>
-    <img src="{% static 'main/images/bike1.jpg' %}" alt="Велосипед 1" class="bike-image">
-</section>
+<div class="section-grid">
+    <section>
+        
+        <h2>Добро пожаловать!</h2>
+        <p>Мы - команда энтузиастов велоспорта, предлагающая широкий ассортимент велосипедов и услуг по ремонту.</p>
+        <img src="{% static 'main/images/bike1.jpg' %}" alt="Велосипед 1" class="bike-image">
+    </section>
 
-<section>
-    <img src="{% static 'main/images/bike_repair.jpg' %}" alt="Ремонт велосипедов" class="bike-image">
-    <div class="text-content">
-        <h2>Наши услуги</h2>
-        <ul> 
-            <li>Продажа велосипедов</li>
-            <li>Ремонт и обслуживание</li>
-            <li>Подбор аксессуаров</li>
-        </ul>
-    </div>
-</section>
+    <section>
+        <img src="{% static 'main/images/bike_repair.jpg' %}" alt="Ремонт велосипедов" class="bike-image">
+        <div class="text-content">
+            <h2>Наши услуги</h2>
+            <ul> 
+                <li>Продажа велосипедов</li>
+                <li>Ремонт и обслуживание</li>
+                <li>Подбор аксессуаров</li>
+            </ul>
+        </div>
+    </section>
+</div>
+
 {% endblock %}
