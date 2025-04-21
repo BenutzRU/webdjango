@@ -62,7 +62,7 @@ section {
     background-color: #fff;
     padding: 1rem;
     border-radius: 5px;
-    max-width: 900px;
+    max-width: 550px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -128,4 +128,64 @@ hr {
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
+}
+
+.carousel {
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.carousel-inner {
+    width: 100%;
+    overflow: hidden;
+}
+
+.carousel-item {
+    width: 100%;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* меняем с cover на contain */
+    display: block;
+    background-color: #000; /* добавляем фон, если изображение не заполняет всю область */
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.carousel-caption p {
+    color: white;
+    font-size: 18px;
+}
+
+.carousel-caption .btn {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+}
+
+.carousel-caption .btn:hover {
+    background-color: #219653;
+}
+
+
+.carousel-control-prev,
+.carousel-control-next {
+    background-color: transparent; 
+}
+
+.carousel-control-prev:hover,
+.carousel-control-prev:focus,
+.carousel-control-next:hover,
+.carousel-control-next:focus {
+    background-color: transparent; 
+    opacity: 1; 
 }
