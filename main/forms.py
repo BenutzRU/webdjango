@@ -1,6 +1,7 @@
 from django import forms
 from django.db import models
 from .models import Comment
+from .models import Blog
 
 class FeedbackForm(forms.Form):
     name = forms.CharField(label="Ваше имя", required=True)
@@ -23,6 +24,23 @@ class FeedbackForm(forms.Form):
 
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = Comment  # Используемая модель
-        fields = ('text',)  # Требуется заполнить только поле text
-        labels = {'text': "Комментарий"}  # Метка к полю формы
+        model = Comment  
+        fields = ('text',)  
+        labels = {'text': "Комментарий"}  
+
+
+class BlogForm(forms.ModelForm):  # Форма для добавления статьи
+    class Meta:
+        model = Blog
+        fields = ['title', 'short_content', 'full_content', 'image']
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'Введите заголовок'}),
+            'short_content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Введите краткое содержание'}),
+            'full_content': forms.Textarea(attrs={'rows': 5, 'placeholder': 'Введите полное содержание'}),
+        }
+        labels = {
+            'title': 'Заголовок',
+            'short_content': 'Краткое содержание',
+            'full_content': 'Полное содержание',
+            'image': 'Изображение',
+        }

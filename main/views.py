@@ -4,9 +4,10 @@ from django.http import HttpRequest
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-from datetime import datetime  # Добавляем импорт
+from datetime import datetime 
 from .models import Blog, Comment
-from .forms import CommentForm
+from .forms import CommentForm, BlogForm
+from django.shortcuts import render
 
 
 
@@ -76,14 +77,14 @@ def registration(request):
     )
 def blog(request):
     """Renders the blog page."""
-    assert isinstance(request, HttpRequest)
-    posts = Blog.objects.all()  # Запрос на выбор всех статей
+    assert isinstance(request, HttpRequest) # выполняет проверку типа объекта request во время выполнения программы.
+    posts = Blog.objects.all()  
     return render(
         request,
-        'main/blog.html',  # Путь к шаблону
+        'main/blog.html',  
         {
             'title': 'Блог',
-            'posts': posts,  # Передача списка статей
+            'posts': posts,  # Передача 
             'year': datetime.now().year,
         }
     )
@@ -91,28 +92,49 @@ def blog(request):
 def blogpost(request, parametr):
     """Renders the blogpost page."""
     assert isinstance(request, HttpRequest)
-    post_1 = Blog.objects.get(id=parametr)  # Запрос на выбор статьи
-    comments = Comment.objects.filter(post=parametr)  # Запрос на выбор всех комментариев
+    post_1 = Blog.objects.get(id=parametr)  
+    comments = Comment.objects.filter(post=parametr)  
 
-    if request.method == "POST":  # После отправки формы
+    if request.method == "POST":  
         form = CommentForm(request.POST)
         if form.is_valid():
             comment_f = form.save(commit=False)
-            comment_f.author = request.user  # Добавляем авторизованного пользователя
-            comment_f.date = datetime.now()  # Текущая дата
-            comment_f.post = Blog.objects.get(id=parametr)  # Связь со статьей
-            comment_f.save()  # Сохраняем комментарий
-            return redirect('blogpost', parametr=post_1.id)  # Переадресация
+            comment_f.author = request.user  
+            comment_f.date = datetime.now()  
+            comment_f.post = Blog.objects.get(id=parametr) 
+            comment_f.save()  
+            return redirect('blogpost', parametr=post_1.id)  
     else:
-        form = CommentForm()  # Пустая форма для GET-запроса
+        form = CommentForm()  
 
     return render(
         request,
         'main/blogpost.html',
         {
             'post_1': post_1,
-            'comments': comments,  # Передача комментариев
-            'form': form,  # Передача формы
+            'comments': comments,  # Передача 
+            'form': form, 
             'year': datetime.now().year,
         }
     )
+
+
+def newpost(request):
+    if not request.user.is_superuser:  # Доступ только для администратора
+        return redirect('blog')
+    
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES)  # Обрабатываем POST и файлы
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user  # Устанавливаем автора
+            post.save()
+            return redirect('blog')  # Перенаправляем на страницу блога
+    else:
+        form = BlogForm()
+    
+    return render(request, 'main/newpost.html', {'form': form})
+
+def videopost(request):
+    """Renders the videopost page."""
+    return render(request, 'main/videopost.html')

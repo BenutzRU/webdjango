@@ -9,6 +9,9 @@ class Blog(models.Model):
     short_content = models.TextField(verbose_name="Краткое содержание")
     full_content = models.TextField(verbose_name="Полное содержание")
     posted = models.DateTimeField(default=datetime.now, db_index=True, verbose_name="Опубликована")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
+    image = models.ImageField(upload_to='blog_images/', null=True, blank=True, verbose_name="Изображение")  
+    
 
     def get_absolute_url(self):
         return reverse('blog_detail', args=[str(self.id)])

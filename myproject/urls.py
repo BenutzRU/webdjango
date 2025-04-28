@@ -2,6 +2,8 @@ from django.urls import path
 from main import views
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static  # Импорт для медиафайлов
 
 urlpatterns = [
     path('', views.index, name='index'), 
@@ -17,4 +19,6 @@ urlpatterns = [
     path('logout/', views.custom_logout, name='logout'),
     path('blog/', views.blog, name='blog'), 
     path('blogpost/<int:parametr>/', views.blogpost, name='blogpost'),
-]
+    path('newpost/', views.newpost, name='newpost'),
+    path('video/', views.videopost, name='video'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -25,10 +25,13 @@ SECRET_KEY = 'django-insecure-*6vs#pk0ud01a%k_ctf!ev4y-4m52l-8-(2*&yt_@y!68*q%d@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ivanovii2.pythonanywhere.com']
 
-LOGIN_REDIRECT_URL = 'about'  # После логина на /about/
-LOGOUT_REDIRECT_URL = 'about'  # После логаута на /about/
+LOGIN_REDIRECT_URL = 'about' 
+LOGOUT_REDIRECT_URL = 'about'  
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Application definition
 
@@ -65,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
