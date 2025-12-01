@@ -5,8 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from datetime import datetime 
-from .models import Blog, Comment
-from .forms import CommentForm, BlogForm
+from .models import Blog, Comment, Product
+from .forms import CommentForm, BlogForm, ProductForm
 from django.shortcuts import render
 
 
@@ -29,7 +29,8 @@ def links(request):
     return render(request, 'main/links.html')
 
 def shop(request):
-    return render(request, 'main/shop.html')
+    products = Product.objects.all()
+    return render(request, 'main/shop.html', {'products': products})
 
 def services(request):
     return render(request, 'main/services.html')
@@ -134,6 +135,22 @@ def newpost(request):
         form = BlogForm()
     
     return render(request, 'main/newpost.html', {'form': form})
+
+
+def add_product(request):
+    if not request.user.is_superuser:  # Доступ только для администратора
+        return redirect('shop')
+    
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)  # Обрабатываем POST и файлы
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.save()
+            return redirect('shop')  # Перенаправляем на страницу магазина
+    else:
+        form = ProductForm()
+    
+    return render(request, 'main/newshop.html', {'form': form})
 
 def videopost(request):
     """Renders the videopost page."""

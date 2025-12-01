@@ -27,8 +27,8 @@
         <a href="{% url 'blog' %}">Блог</a> 
         <a href="{% url 'video' %}">Видео</a> 
         {% if user.is_superuser %}
-        <a href="{% url 'newpost' %}" class="add-post-icon">
-            <img src="{% static 'main/content/add_new.png' %}" alt="Добавить статью" title="Добавить статью">
+        <a href="{% url 'newpost' %}" class="add-post-icon" title="Добавить статью">
+            <img src="{% static 'main/content/add_new.png' %}" alt="Добавить статью">
         </a>
         {% endif %}
 

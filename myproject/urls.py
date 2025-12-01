@@ -21,4 +21,5 @@ urlpatterns = [
     path('blogpost/<int:parametr>/', views.blogpost, name='blogpost'),
     path('newpost/', views.newpost, name='newpost'),
     path('video/', views.videopost, name='video'),
+    path('add_product/', views.add_product, name='add_product'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

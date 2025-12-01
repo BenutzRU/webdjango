@@ -1,7 +1,6 @@
 from django import forms
 from django.db import models
-from .models import Comment
-from .models import Blog
+from .models import Comment, Blog, Product
 
 class FeedbackForm(forms.Form):
     name = forms.CharField(label="Ваше имя", required=True)
@@ -42,5 +41,24 @@ class BlogForm(forms.ModelForm):  # Форма для добавления ст�
             'title': 'Заголовок',
             'short_content': 'Краткое содержание',
             'full_content': 'Полное содержание',
+            'image': 'Изображение',
+        }
+
+
+class ProductForm(forms.ModelForm):  # Форма для добавления товара
+    class Meta:
+        model = Product
+        fields = ['title', 'description', 'price', 'category', 'image']
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'Введите название товара'}),
+            'description': forms.Textarea(attrs={'rows': 5, 'placeholder': 'Введите описание товара'}),
+            'price': forms.NumberInput(attrs={'placeholder': 'Введите цену', 'step': '0.01'}),
+            'category': forms.Select(),
+        }
+        labels = {
+            'title': 'Название товара',
+            'description': 'Описание',
+            'price': 'Цена',
+            'category': 'Категория',
             'image': 'Изображение',
         }
