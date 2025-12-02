@@ -1,0 +1,426 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Мои заказы - BikeShop{% endblock %}
+
+{% block content %}
+<section class="my-orders-section">
+    <h1>Мои заказы</h1>
+    
+    {% if orders %}
+    <div class="orders-container">
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Номер заказа</th>
+                    <th>Дата</th>
+                    <th>Статус</th>
+                    <th>Сумма</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr class="order-row" data-order-id="{{ order.id }}">
+                    <td class="order-id">#{{ order.id }}</td>
+                    <td class="order-date">{{ order.created|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <span class="status-badge status-{{ order.status }}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="order-price">{{ order.total_price }} руб.</td>
+                    <td>
+                        <button class="btn btn-small btn-view" data-order-id="{{ order.id }}">
+                            Подробнее
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+    
+    {% else %}
+    <div class="empty-orders">
+        <p>У вас нет заказов</p>
+        <a href="{% url 'shop' %}" class="btn btn-primary">Перейти в магазин</a>
+    </div>
+    {% endif %}
+</section>
+
+<style>
+    .my-orders-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 20px;
+    }
+    
+    .my-orders-section h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+    
+    .empty-orders {
+        text-align: center;
+        padding: 60px 20px;
+    }
+    
+    .empty-orders p {
+        font-size: 1.2em;
+        color: #666;
+        margin-bottom: 20px;
+    }
+    
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .orders-table thead {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #ddd;
+    }
+    
+    .orders-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .orders-table td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+    }
+    
+    .orders-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .orders-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .order-id {
+        font-weight: bold;
+        color: #007bff;
+    }
+    
+    .order-date {
+        color: #666;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    .status-processing {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .status-assembly {
+        background-color: #cfe2ff;
+        color: #084298;
+    }
+    
+    .status-shipping {
+        background-color: #d1e7f0;
+        color: #0c5460;
+    }
+    
+    .status-delivered {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .status-cancelled {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    
+    .order-price {
+        font-weight: bold;
+        color: #28a745;
+    }
+    
+    .btn-small {
+        padding: 6px 12px;
+        font-size: 0.9em;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .btn-view {
+        background-color: #007bff;
+        color: white;
+    }
+    
+    .btn-view:hover {
+        background-color: #0056b3;
+    }
+    
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4);
+        animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .modal-content {
+        background-color: white;
+        margin: 5% auto;
+        padding: 0;
+        border-radius: 8px;
+        max-width: 600px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        animation: slideIn 0.3s;
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        padding: 15px 20px;
+        cursor: pointer;
+        display: block;
+    }
+    
+    .close:hover,
+    .close:focus {
+        color: #000;
+    }
+    
+    #modalBody {
+        padding: 20px;
+    }
+    
+    .modal-section {
+        margin-bottom: 20px;
+    }
+    
+    .modal-section h3 {
+        margin: 0 0 15px;
+        color: #333;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+    }
+    
+    .modal-detail {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .modal-detail:last-child {
+        border-bottom: none;
+    }
+    
+    .modal-detail .label {
+        font-weight: bold;
+        color: #666;
+    }
+    
+    .modal-detail .value {
+        color: #333;
+    }
+    
+    .modal-items {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+    }
+    
+    .modal-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .modal-item:last-child {
+        border-bottom: none;
+    }
+    
+    .item-info {
+        flex-grow: 1;
+    }
+    
+    .item-name {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    .item-qty {
+        color: #666;
+        font-size: 0.9em;
+    }
+    
+    .item-total {
+        font-weight: bold;
+        color: #28a745;
+        min-width: 100px;
+        text-align: right;
+    }
+    
+    .modal-total {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 2px solid #ddd;
+        font-size: 1.1em;
+    }
+    
+    .modal-total-amount {
+        font-weight: bold;
+        color: #28a745;
+        margin-left: 20px;
+    }
+    
+    @media (max-width: 768px) {
+        .orders-table {
+            font-size: 0.9em;
+        }
+        
+        .orders-table th,
+        .orders-table td {
+            padding: 10px;
+        }
+        
+        .modal-content {
+            margin: 20% auto;
+            width: 90%;
+        }
+    }
+</style>
+
+<script>
+    const modal = document.getElementById('orderModal');
+    const closeBtn = document.querySelector('.close');
+    const viewBtns = document.querySelectorAll('.btn-view');
+    
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    // Display order details in modal
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-order-id');
+            const orderRow = document.querySelector(`.order-row[data-order-id="${orderId}"]`);
+            
+            const orderNum = orderRow.querySelector('.order-id').textContent;
+            const orderDate = orderRow.querySelector('.order-date').textContent;
+            const orderStatus = orderRow.querySelector('.status-badge').textContent;
+            const orderPrice = orderRow.querySelector('.order-price').textContent;
+            
+            // Parse order data from the table (simplified - in production would fetch from server)
+            const modalBodyHTML = `
+                <div class="modal-section">
+                    <h3>Информация о заказе</h3>
+                    <div class="modal-detail">
+                        <span class="label">Номер заказа:</span>
+                        <span class="value">${orderNum}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="label">Дата:</span>
+                        <span class="value">${orderDate}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="label">Статус:</span>
+                        <span class="value">${orderStatus}</span>
+                    </div>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>Сумма</h3>
+                    <div class="modal-total">
+                        <strong>Итого:</strong>
+                        <span class="modal-total-amount">${orderPrice}</span>
+                    </div>
+                </div>
+                
+                <p style="color: #666; font-size: 0.9em; margin-top: 20px;">
+                    Полная информация о товарах в заказе доступна в административной панели.
+                </p>
+            `;
+            
+            document.getElementById('modalBody').innerHTML = modalBodyHTML;
+            modal.style.display = 'block';
+        });
+    });
+    
+    // Close modal
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

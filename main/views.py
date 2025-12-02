@@ -1,13 +1,16 @@
 from django.shortcuts import render
 from .forms import FeedbackForm
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from datetime import datetime 
-from .models import Blog, Comment, Product
+from .models import Blog, Comment, Product, Order
 from .forms import CommentForm, BlogForm, ProductForm
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
+import json
 
 
 
@@ -155,3 +158,227 @@ def add_product(request):
 def videopost(request):
     """Renders the videopost page."""
     return render(request, 'main/videopost.html')
+
+
+def get_cart(request):
+    """Получить корзину из сессии"""
+    if 'cart' not in request.session:
+        request.session['cart'] = {}
+    return request.session['cart']
+
+
+@require_http_methods(["POST"])
+def add_to_cart(request):
+    """Добавить товар в корзину"""
+    try:
+        data = json.loads(request.body)
+        product_id = str(data.get('product_id'))
+        
+        if not product_id:
+            return JsonResponse({'error': 'Product ID required'}, status=400)
+        
+        # Проверим, что товар существует
+        try:
+            product = Product.objects.get(id=int(product_id))
+        except Product.DoesNotExist:
+            return JsonResponse({'error': 'Product not found'}, status=404)
+        
+        cart = get_cart(request)
+        
+        if product_id in cart:
+            cart[product_id]['quantity'] += 1
+        else:
+            cart[product_id] = {
+                'quantity': 1,
+                'title': product.title,
+                'price': float(product.price)
+            }
+        
+        request.session['cart'] = cart
+        request.session.modified = True
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'{product.title} добавлен в корзину',
+            'cart_count': sum(item['quantity'] for item in cart.values())
+        })
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+
+def cart(request):
+    """Отобразить страницу корзины"""
+    cart_items = get_cart(request)
+    products_in_cart = []
+    total_price = 0
+    
+    for product_id, item in cart_items.items():
+        try:
+            product = Product.objects.get(id=int(product_id))
+            item_total = item['price'] * item['quantity']
+            products_in_cart.append({
+                'id': product_id,
+                'product': product,
+                'quantity': item['quantity'],
+                'price': item['price'],
+                'total': item_total
+            })
+            total_price += item_total
+        except Product.DoesNotExist:
+            # Удалим товар, который больше не существует
+            del cart_items[product_id]
+            request.session['cart'] = cart_items
+            request.session.modified = True
+    
+    return render(request, 'main/cart.html', {
+        'cart_items': products_in_cart,
+        'total_price': total_price
+    })
+
+
+@require_http_methods(["POST"])
+def update_cart_item(request):
+    """Изменить количество товара в корзине"""
+    try:
+        data = json.loads(request.body)
+        product_id = str(data.get('product_id'))
+        quantity = int(data.get('quantity', 1))
+        
+        if quantity < 1:
+            return JsonResponse({'error': 'Quantity must be at least 1'}, status=400)
+        
+        cart = get_cart(request)
+        
+        if product_id in cart:
+            cart[product_id]['quantity'] = quantity
+            request.session['cart'] = cart
+            request.session.modified = True
+            
+            item_total = cart[product_id]['price'] * quantity
+            total_price = sum(item['price'] * item['quantity'] for item in cart.values())
+            
+            return JsonResponse({
+                'success': True,
+                'item_total': item_total,
+                'total_price': total_price
+            })
+        else:
+            return JsonResponse({'error': 'Product not in cart'}, status=404)
+    except (json.JSONDecodeError, ValueError):
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+@require_http_methods(["POST"])
+def remove_from_cart(request):
+    """Удалить товар из корзины"""
+    try:
+        data = json.loads(request.body)
+        product_id = str(data.get('product_id'))
+        
+        cart = get_cart(request)
+        
+        if product_id in cart:
+            del cart[product_id]
+            request.session['cart'] = cart
+            request.session.modified = True
+            
+            total_price = sum(item['price'] * item['quantity'] for item in cart.values())
+            
+            return JsonResponse({
+                'success': True,
+                'total_price': total_price,
+                'cart_count': sum(item['quantity'] for item in cart.values())
+            })
+        else:
+            return JsonResponse({'error': 'Product not in cart'}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+
+@login_required(login_url='login')
+def checkout(request):
+    """Оформление заказа"""
+    cart_items = get_cart(request)
+    
+    if not cart_items:
+        return redirect('cart')
+    
+    # Рассчитываем общую сумму и подготавливаем товары для шаблона
+    total_price = 0
+    items_for_template = []
+    
+    for product_id, item in cart_items.items():
+        item_total = item['price'] * item['quantity']
+        total_price += item_total
+        items_for_template.append({
+            'id': product_id,
+            'title': item['title'],
+            'price': item['price'],
+            'quantity': item['quantity'],
+            'total': item_total
+        })
+    
+    # Создаём заказ
+    order = Order.objects.create(
+        user=request.user,
+        order_data=dict(cart_items),
+        total_price=total_price,
+        status='processing'
+    )
+    
+    # Очищаем корзину
+    request.session['cart'] = {}
+    request.session.modified = True
+    
+    return render(request, 'main/order_confirmation.html', {
+        'order': order,
+        'cart_items': items_for_template
+    })
+
+
+@login_required(login_url='login')
+def my_orders(request):
+    """Просмотр заказов пользователя"""
+    orders = Order.objects.filter(user=request.user).order_by('-created')
+    
+    return render(request, 'main/my_orders.html', {
+        'orders': orders
+    })
+
+
+def admin_orders(request):
+    """Просмотр всех заказов для администратора"""
+    if not request.user.is_superuser:
+        return redirect('shop')
+    
+    orders = Order.objects.all().order_by('-created')
+    
+    return render(request, 'main/admin_orders.html', {
+        'orders': orders
+    })
+
+
+@require_http_methods(["POST"])
+def update_order_status(request):
+    """Изменение статуса заказа"""
+    if not request.user.is_superuser:
+        return JsonResponse({'error': 'Access denied'}, status=403)
+    
+    try:
+        data = json.loads(request.body)
+        order_id = data.get('order_id')
+        new_status = data.get('status')
+        
+        try:
+            order = Order.objects.get(id=order_id)
+            order.status = new_status
+            order.save()
+            
+            return JsonResponse({
+                'success': True,
+                'status': order.get_status_display()
+            })
+        except Order.DoesNotExist:
+            return JsonResponse({'error': 'Order not found'}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)

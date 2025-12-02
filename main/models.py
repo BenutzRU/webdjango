@@ -63,6 +63,32 @@ class Product(models.Model):
         ordering = ['-created']
 
 
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ('processing', 'На обработке'),
+        ('assembly', 'На сборке'),
+        ('shipping', 'В доставке'),
+        ('delivered', 'Прибыл'),
+        ('cancelled', 'Отменён'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    order_data = models.JSONField(verbose_name="Данные заказа")  # Сохраняем JSON с товарами и количеством
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Общая сумма")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='processing', verbose_name="Статус")
+    created = models.DateTimeField(default=datetime.now, db_index=True, verbose_name="Дата создания")
+    updated = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+    
+    def __str__(self):
+        return f"Заказ #{self.id} от {self.user.username} ({self.get_status_display()})"
+    
+    class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+        ordering = ['-created']
+
+
 admin.site.register(Blog)
 admin.site.register(Comment)
 admin.site.register(Product)
+admin.site.register(Order)

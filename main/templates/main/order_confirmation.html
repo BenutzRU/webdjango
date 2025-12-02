@@ -1,0 +1,268 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Подтверждение заказа - BikeShop{% endblock %}
+
+{% block content %}
+<section class="order-confirmation">
+    <div class="confirmation-container">
+        <div class="success-message">
+            <h1>✓ Заказ успешно создан!</h1>
+            <p class="order-number">Номер заказа: <strong>#{{ order.id }}</strong></p>
+        </div>
+        
+        <div class="order-details">
+            <h2>Детали заказа</h2>
+            
+            <div class="detail-row">
+                <span class="label">Статус:</span>
+                <span class="value status-badge processing">{{ order.get_status_display }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="label">Дата создания:</span>
+                <span class="value">{{ order.created|date:"d.m.Y H:i" }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="label">Клиент:</span>
+                <span class="value">{{ order.user.first_name }} {{ order.user.last_name }} ({{ order.user.username }})</span>
+            </div>
+        </div>
+        
+        <div class="order-items">
+            <h2>Товары в заказе</h2>
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Цена</th>
+                        <th>Количество</th>
+                        <th>Сумма</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.price }} руб.</td>
+                        <td>{{ item.quantity }} шт.</td>
+                        <td class="total">{{ item.total }} руб.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="order-total">
+                <strong>Общая сумма:</strong>
+                <span class="total-amount">{{ order.total_price }} руб.</span>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'my_orders' %}" class="btn btn-primary">Мои заказы</a>
+            <a href="{% url 'shop' %}" class="btn btn-secondary">Продолжить покупки</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .order-confirmation {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: linear-gradient(to bottom, #f8f9fa, #fff);
+        min-height: 100vh;
+    }
+    
+    .confirmation-container {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .success-message {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+    }
+    
+    .success-message h1 {
+        margin: 0 0 10px;
+        font-size: 2em;
+        color: white;
+    }
+    
+    .order-number {
+        font-size: 1.2em;
+        margin: 0;
+        opacity: 0.95;
+    }
+    
+    .order-details,
+    .order-items {
+        padding: 30px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .order-items {
+        border-bottom: none;
+    }
+    
+    .order-details h2,
+    .order-items h2 {
+        margin-top: 0;
+        color: #333;
+        border-bottom: 2px solid #28a745;
+        padding-bottom: 10px;
+    }
+    
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-row .label {
+        font-weight: bold;
+        color: #666;
+        min-width: 150px;
+    }
+    
+    .detail-row .value {
+        color: #333;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+    
+    .status-badge.processing {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    
+    .items-table thead {
+        background-color: #f8f9fa;
+    }
+    
+    .items-table th {
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+        border-bottom: 2px solid #ddd;
+        color: #333;
+    }
+    
+    .items-table td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .items-table .total {
+        font-weight: bold;
+        color: #28a745;
+    }
+    
+    .order-total {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        font-size: 1.2em;
+    }
+    
+    .total-amount {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #28a745;
+    }
+    
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        padding: 30px;
+        background-color: #f8f9fa;
+    }
+    
+    .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s;
+        text-align: center;
+        display: inline-block;
+    }
+    
+    .btn-primary {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+    }
+    
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+    
+    @media (max-width: 600px) {
+        .order-confirmation {
+            padding: 20px 10px;
+        }
+        
+        .detail-row {
+            flex-direction: column;
+        }
+        
+        .detail-row .label {
+            margin-bottom: 5px;
+        }
+        
+        .order-total {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}

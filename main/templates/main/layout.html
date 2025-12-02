@@ -25,17 +25,20 @@
         <a href="{% url 'contacts' %}">Контакты</a>
         <a href="{% url 'feedback' %}">Обратная связь</a>
         <a href="{% url 'blog' %}">Блог</a> 
-        <a href="{% url 'video' %}">Видео</a> 
+        <a href="{% url 'video' %}">Видео</a>
+        <a href="{% url 'cart' %}">Корзина</a> 
         {% if user.is_superuser %}
         <a href="{% url 'newpost' %}" class="add-post-icon" title="Добавить статью">
             <img src="{% static 'main/content/add_new.png' %}" alt="Добавить статью">
         </a>
+        <a href="{% url 'admin_orders' %}">Управление заказами</a>
         {% endif %}
 
         {% if not user.is_authenticated %}
             <a href="{% url 'registration' %}">Регистрация</a>
             <a href="{% url 'login' %}">Вход</a>
         {% else %}
+            <a href="{% url 'my_orders' %}">Мои заказы</a>
             <a href="{% url 'logout' %}">Выйти</a>
             <span>Привет, {{ user.username }}!</span>
         {% endif %}
