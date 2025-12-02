@@ -45,6 +45,8 @@ class Product(models.Model):
         ('mountain', 'Горные велосипеды'),
         ('road', 'Шоссейные велосипеды'),
         ('city', 'Городские и прогулочные велосипеды'),
+        ('trick', 'Трюковые велосипеды'),
+        ('kids', 'Детские велосипеды'),
     ]
     
     title = models.CharField(max_length=200, verbose_name="Название товара")
