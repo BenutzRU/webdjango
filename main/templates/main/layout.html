@@ -27,7 +27,7 @@
         <a href="{% url 'blog' %}">Блог</a> 
         <a href="{% url 'video' %}">Видео</a>
         <a href="{% url 'cart' %}">Корзина</a> 
-        {% if user.is_superuser %}
+        {% if user.is_staff %}
         <a href="{% url 'newpost' %}" class="add-post-icon" title="Добавить статью">
             <img src="{% static 'main/content/add_new.png' %}" alt="Добавить статью">
         </a>

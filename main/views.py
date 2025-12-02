@@ -141,7 +141,7 @@ def newpost(request):
 
 
 def add_product(request):
-    if not request.user.is_superuser:  # Доступ только для администратора
+    if not request.user.is_staff:  # Доступ только для персонала
         return redirect('shop')
     
     if request.method == 'POST':
@@ -348,7 +348,7 @@ def my_orders(request):
 
 def admin_orders(request):
     """Просмотр всех заказов для администратора"""
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         return redirect('shop')
     
     orders = Order.objects.all().order_by('-created')
@@ -361,7 +361,7 @@ def admin_orders(request):
 @require_http_methods(["POST"])
 def update_order_status(request):
     """Изменение статуса заказа"""
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         return JsonResponse({'error': 'Access denied'}, status=403)
     
     try:
