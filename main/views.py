@@ -35,6 +35,15 @@ def shop(request):
     products = Product.objects.all()
     return render(request, 'main/shop.html', {'products': products})
 
+def product_detail(request, product_id):
+    """Детальная страница товара"""
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return redirect('shop')
+    
+    return render(request, 'main/product_detail.html', {'product': product})
+
 def services(request):
     return render(request, 'main/services.html')
 

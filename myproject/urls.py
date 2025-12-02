@@ -11,6 +11,7 @@ urlpatterns = [
     path('contacts/', views.contacts, name='contacts'),
     path('links/', views.links, name='links'),
     path('shop/', views.shop, name='shop'),
+    path('product/<int:product_id>/', views.product_detail, name='product_detail'),
     path('services/', views.services, name='services'),
     path('feedback/', views.feedback_view, name='feedback'),
     path('admin/', admin.site.urls),

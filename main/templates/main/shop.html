@@ -24,32 +24,34 @@
     <div class="products-container">
         {% for product in products %}
         <div class="product-card">
-            {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="product-image">
-            {% else %}
-            <img src="{% static 'main/images/bike_shop.jpg' %}" alt="{{ product.title }}" class="product-image">
-            {% endif %}
-            <h3>{{ product.title }}</h3>
-            <p class="product-category">
-                <strong>Категория:</strong> 
-                {% if product.category == 'mountain' %}
-                    Горные велосипеды
-                {% elif product.category == 'road' %}
-                    Шоссейные велосипеды
-                {% elif product.category == 'city' %}
-                    Городские и прогулочные велосипеды
-                {% elif product.category == 'trick' %}
-                    Трюковые велосипеды
-                {% elif product.category == 'kids' %}
-                    Детские велосипеды
+            <a href="{% url 'product_detail' product.id %}" class="product-card-link">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.title }}" class="product-image">
                 {% else %}
-                    {{ product.get_category_display }}
+                <img src="{% static 'main/images/bike_shop.jpg' %}" alt="{{ product.title }}" class="product-image">
                 {% endif %}
-            </p>
-            <p class="product-description">{{ product.description }}</p>
-            <p class="product-price"><strong>Цена:</strong> {{ product.price }} руб.</p>
-            <p class="product-date"><small>Добавлено: {{ product.created|date:"d.m.Y" }}</small></p>
-            <button class="btn btn-add-to-cart" data-product-id="{{ product.id }}">+</button>
+                <h3>{{ product.title }}</h3>
+                <p class="product-category">
+                    <strong>Категория:</strong> 
+                    {% if product.category == 'mountain' %}
+                        Горные велосипеды
+                    {% elif product.category == 'road' %}
+                        Шоссейные велосипеды
+                    {% elif product.category == 'city' %}
+                        Городские и прогулочные велосипеды
+                    {% elif product.category == 'trick' %}
+                        Трюковые велосипеды
+                    {% elif product.category == 'kids' %}
+                        Детские велосипеды
+                    {% else %}
+                        {{ product.get_category_display }}
+                    {% endif %}
+                </p>
+                <p class="product-description">{{ product.description }}</p>
+                <p class="product-price"><strong>Цена:</strong> {{ product.price }} руб.</p>
+                <p class="product-date"><small>Добавлено: {{ product.created|date:"d.m.Y" }}</small></p>
+            </a>
+            <button class="btn btn-add-to-cart" data-product-id="{{ product.id }}" onclick="event.stopPropagation();">+</button>
         </div>
         {% endfor %}
     </div>
@@ -174,6 +176,24 @@
         border-color: #007bff;
     }
     
+    .product-card-link {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        cursor: pointer;
+    }
+    
+    .product-card-link:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .product-card-link:visited {
+        color: inherit;
+    }
+    
     .product-image {
         width: 100%;
         height: 220px;
@@ -249,6 +269,8 @@
         justify-content: center;
         margin-top: auto;
         flex-shrink: 0;
+        position: relative;
+        z-index: 10;
     }
     
     .btn-add-to-cart:hover {
